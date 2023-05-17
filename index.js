@@ -17,10 +17,13 @@ app.use(cors());
 // this creates localhost:3001
 const PORT = process.env.PORT || 3001;
 
-// this creates localhost:3001/hello
+// this creates the API endpoint localhost:3001/weather
 // (request, response) is required
 app.get('/weather', (request, response) => {
-  response.send("hello weather");
+  const {cityName} = request.query;
+  const cityWeather = weather.find(city => city.city_name.toLowerCase() === cityName.toLowerCase());
+  response.send(cityWeather);
+  console.log(request);
 });
 
 
