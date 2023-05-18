@@ -6,6 +6,8 @@ const express = require('express');
 
 const cors = require('cors');
 
+const axios = require('axios');
+
 const weather = require('./data/weather.json');
 
 // this is the 'actual server' and line 12 invokes it
@@ -21,17 +23,36 @@ const PORT = process.env.PORT || 3001;
 // (request, response) is required
 app.get('/weather', getWeather);
 
-function getWeather(request, response) {
-  const { cityName } = request.query;
-  const cityWeather = weather.find(city => city.city_name.toLowerCase() === cityName.toLowerCase());
+async function getWeather(request, response) {
+  const { cityName, lat, lon } = request.query;
+  console.log(lat, lon);
+  const url = `http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&land=en&lat=${lat}&lon=${lon}&days=5`;
+  console.log('this is the url', url);
   try {
-    const weatherArray = cityWeather.data.map(day => new Forecast(day));
+    const weatherResponse = await axios.get(url);
+    const weatherData = weatherResponse.data;
+    const weatherArray = weatherData.data.map(day => new Forecast(day));
     console.log('this is the weatherArray', weatherArray);
     response.status(200).send(weatherArray);
   } catch (error) {
-      errorHandler(error, response)
+    errorHandler(error, response);
   }
 }
+
+// function getWeather(request, response) {
+//   const { cityName, lat, lon } = request.query;
+//   console.log(lat, lon);
+//   const cityWeather = weather.find(city => city.city_name.toLowerCase() === cityName.toLowerCase());
+//   const url = `http://api.weatherbit.io/v2.0/forecast/daily/?key=${process.env.WEATHER_API_KEY}&land=en&lat=${lat}&lon=${lon}&days=5`;
+//   console.log('this is the url', url.data);
+//   try {
+//     const weatherArray = cityWeather.data.map(day => new Forecast(day));
+//     console.log('this is the weatherArray', weatherArray);
+//     response.status(200).send(weatherArray);
+//   } catch (error) {
+//     errorHandler(error, response);
+//   }
+// }
 
 function Forecast(day) {
   this.date = day.valid_date;
