@@ -39,6 +39,24 @@ async function getWeather(request, response) {
   }
 }
 
+app.get('/movies', getMovies);
+
+async function getMovies(request, response) {
+  const { cityName } = request.query;
+  console.log(cityName);
+  let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${cityName}&page=1`;
+  console.log('this is the url', url);
+  try {
+    const moviesResponse = await axios.get(url);
+    const movieData = moviesResponse.data;
+    const movieArray = movieData.results.map(movie => new Movie(movie));
+    console.log('this is the movieArray', movieArray);
+    response.status(200).send(movieArray);
+  } catch (error) {
+    errorHandler(error, response);
+  }
+}
+
 // function getWeather(request, response) {
 //   const { cityName, lat, lon } = request.query;
 //   console.log(lat, lon);
@@ -58,6 +76,18 @@ function Forecast(day) {
   this.date = day.valid_date;
   this.description = day.weather.description;
 }
+
+function Movie(movie) {
+  this.title = movie.original_title;
+  this.overview = movie.overview;
+  this.averageVotes = movie.vote_average;
+  this.totalVotes = movie.vote_count;
+  this.image_url = movie.poster_path;
+  this.popularity = movie.popularity;
+  this.releaseDate = movie.release_date;
+}
+
+console.log(Movie.overview)
 
 function errorHandler(error, response) {
   console.log(error);
