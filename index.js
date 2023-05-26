@@ -19,7 +19,9 @@ app.use(cors());
 // this creates localhost:3001
 const PORT = process.env.PORT || 3001;
 
-app.get('/', console.log('proof of life'))
+app.get('/', (req, res) => {
+  res.status(200).send('this server is working overtime');
+});
 
 // this creates the API endpoint localhost:3001/weather
 // (request, response) is required
