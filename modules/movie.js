@@ -19,7 +19,7 @@ async function getMovies(req, res, next) {
     try {
       cache[key].data = movieData.data.results;
       let movieDataToSend = cache[key].data.map(object => {
-        return new movieDataToSend(object);
+        return new Movies(object);
       });
       response.status(200).send(movieDataToSend)
     } catch (error) {
@@ -32,7 +32,7 @@ class Movies {
   constructor(movie) {
     this.title = movie.original_title;
     this.overview = movie.overview;
-    this.averageVotes - movie.vote.average;
+    this.averageVotes - movie.vote_average;
     this.totalVotes = movie.vote_count;
     this.image_url = movie.poster_path;
     this.popularity = movie.popularity;
