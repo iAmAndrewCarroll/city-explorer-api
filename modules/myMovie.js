@@ -1,7 +1,7 @@
 'use strict';
 const axios = require('axios');
 
-async function handleGetMovies(requ, res, next) {
+async function handleGetMovies(req, res, next) {
   try {
     console.log('req query here: ', req.query);
     let city = req.query.cityName;
@@ -11,7 +11,7 @@ async function handleGetMovies(requ, res, next) {
     let movieMap = parseMovies(movieData.data.results);
     console.log('These be movies: ', movieMap);
     movieMap.then(movie => {
-      response.status(200).send(movie);
+      res.status(200).send(movie);
     })
 
   } catch (error) {
