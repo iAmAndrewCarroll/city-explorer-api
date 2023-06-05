@@ -63,7 +63,8 @@ class Movie {
     this.overview = movie.overview;
     this.averageVotes = movie.vote_average;
     this.totalVotes = movie.vote_count;
-    this.image_url = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+    // this.image_url = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
+    this.image_url = movie.poster_path;
     this.popularity = movie.popularity;
     this.releaseDate = movie.release_date;
   }
